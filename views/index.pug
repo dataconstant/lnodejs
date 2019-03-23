@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  form(action='/add_user', method='POST')
+    p
+      | username :
+      input(name='username', value='', type='text')
+      | password :
+      input(name='password', value='', type='password')
+
+    input(value='Submit', type='submit')
