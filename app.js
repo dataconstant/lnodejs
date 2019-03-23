@@ -7,7 +7,7 @@ var mongoose = require("mongoose");
 var bodyparser = require("body-parser")
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var dashboardRouter = require('./routes/dashboard');
 
 var app = express();
 
@@ -34,7 +34,22 @@ app.post('/add_user', function(req, res){
     }
     else res.redirect("/")
   })
+});
 
+app.post('/check_user', function(req, res){
+   var uname = req.body.username;
+   var pword = req.body.password;
+
+   User.findOne({uname:uname,pword:pword},function (err,user) {
+     if (user!=null && uname.localeCompare(user.uname)==0 && pword.localeCompare(user.pword)==0 ){
+       console.log("Logged In")
+       res.redirect("/dashboard")
+     }
+     else {
+       res.redirect("/")
+       console.log("Failed")
+     }
+   });
 });
 
 // view engine setup
@@ -48,7 +63,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/dashboard', dashboardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

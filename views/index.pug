@@ -9,5 +9,12 @@ block content
       input(name='username', value='', type='text')
       | password :
       input(name='password', value='', type='password')
+    input(value='Register', type='submit')
 
-    input(value='Submit', type='submit')
+  form(action='/check_user', method='POST')
+    p
+      | username :
+      input(name='username', value='', type='text')
+      | password :
+      input(name='password', value='', type='password')
+    input(value='Login', type='submit')
