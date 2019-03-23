@@ -6,10 +6,10 @@ var logger = require('morgan');
 var mongoose = require("mongoose");
 var bodyparser = require("body-parser")
 
-var indexRouter = require('./routes/index');
-var dashboardRouter = require('./routes/dashboard');
 
 var app = express();
+
+
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -43,7 +43,7 @@ app.post('/check_user', function(req, res){
    User.findOne({uname:uname,pword:pword},function (err,user) {
      if (user!=null && uname.localeCompare(user.uname)==0 && pword.localeCompare(user.pword)==0 ){
        console.log("Logged In")
-       res.redirect("/dashboard")
+       res.render("dashboard",{username:uname})
      }
      else {
        res.redirect("/")
@@ -60,10 +60,16 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'views')));
 
-app.use('/', indexRouter);
-app.use('/dashboard', dashboardRouter);
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard');
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -80,5 +86,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
